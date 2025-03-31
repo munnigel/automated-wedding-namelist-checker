@@ -1,0 +1,10 @@
+.handsontable {
+  width: 100% !important;
+  transition: all 0.2s ease-in-out;
+  font-size: var(--table-font-size) !important;
+
+  .htCore td {
+    border: 1px solid #ddd;
+  }
+
+}

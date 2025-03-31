@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { Layout } from 'antd';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-function App() {
+import TopMenu from './components/TopMenu/TopMenu';
+import LeftMenu from './components/LeftMenu/LeftMenu';
+import MainPage from './pages/Main/MainPage'
+import NamelistPage from './pages/NameList/NameList'
+
+import styles from './App.module.scss';
+
+const { Sider, Header, Content } = Layout;
+
+const username = 'John Doe';
+
+const App = () => {
+  const [collapsed, setCollapsed] = useState(false);
+
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Layout className={styles.layoutPage}>
+        <Sider className={styles.layoutPageSider} trigger={null} collapsible collapsed={collapsed}>
+          <LeftMenu collapsed={collapsed} />
+        </Sider>
+        <Layout>
+          <Header className={styles.layoutPageHeader}>
+            <TopMenu collapsed={collapsed} toggleCollapsed={toggleCollapsed} username={username} />
+          </Header>
+          <Content className={styles.layoutPageContent}>
+            <Routes>
+              <Route path="/" element={<MainPage />} />
+              <Route path="/namelist" element={<NamelistPage />} />
+            </Routes>
+          </Content>
+        </Layout>
+      </Layout>
+    </Router>
   );
-}
+};
 
 export default App;
