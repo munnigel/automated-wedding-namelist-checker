@@ -1,20 +1,27 @@
 import React from 'react';
 import { Menu } from 'antd';
-import { UploadOutlined, TeamOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { UploadOutlined, UnorderedListOutlined, QrcodeOutlined } from '@ant-design/icons';
+import { Link, useLocation } from 'react-router-dom';
 import styles from './LeftMenu.module.scss';
 
 const Sidebar = ({ collapsed }) => {
+  const location = useLocation();
+
   const menuItems = [
     {
-      key: '1',
+      key: '/',
       icon: <UploadOutlined />,
       label: <Link to="/">Upload</Link>,
     },
     {
-      key: '2',
-      icon: <TeamOutlined />,
-      label: <Link to="/namelist">Wedding Namelist</Link>,
+      key: '/namelist',
+      icon: <UnorderedListOutlined />,
+      label: <Link to="/namelist">Namelist</Link>,
+    },
+    {
+      key: '/checkin-dev',
+      icon: <QrcodeOutlined />,
+      label: <Link to="/checkin-dev">Check-in (Dev)</Link>,
     },
   ];
 
@@ -24,7 +31,7 @@ const Sidebar = ({ collapsed }) => {
         className={styles.leftMenuMenu}
         mode="inline"
         theme="light"
-        defaultSelectedKeys={['1']}
+        selectedKeys={[location.pathname]} // this line keeps selection in sync
         items={menuItems}
       />
     </div>

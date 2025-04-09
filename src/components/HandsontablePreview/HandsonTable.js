@@ -8,7 +8,11 @@ import {
   calculateRowHeights,
   constrainZoom,
   applyZoomToFont,
+  getColumnIndex,
+  COLUMN_COLOR_CONFIG
 } from '../../utils/HandsonTableUtils.js';
+
+import Handsontable from 'handsontable';
 
 import 'handsontable/styles/handsontable.min.css';
 import 'handsontable/styles/ht-theme-main.min.css';
@@ -16,9 +20,20 @@ import styles from './HandsonTable.module.scss';
 
 registerAllModules();
 
+Object.entries(COLUMN_COLOR_CONFIG).forEach(([key, { bg, text }]) => {
+  Handsontable.renderers.registerRenderer(`highlight-${key}`, (hot, TD, ...rest) => {
+    Handsontable.renderers.getRenderer('text')(hot, TD, ...rest);
+    TD.style.background = bg;
+    TD.style.color = text;
+    TD.style.fontWeight = 'bold';
+  });
+});
+
+
 const HandsonTable = ({
   data = [],
-  mergeSettings = []
+  mergeSettings = [],
+  highlightCols = null,
 }) => {
   const [zoomLevel, setZoomLevel] = useState(1);
 
@@ -43,6 +58,29 @@ const HandsonTable = ({
     return () => document.removeEventListener('wheel', handleWheelZoom);
   }, []);
 
+  const getHighlightCells = () => {
+    if (!highlightCols) return [];
+  
+    const cells = [];
+  
+    for (const [key, colLetter] of Object.entries(highlightCols)) {
+      const colIndex = getColumnIndex(colLetter);
+      if (isNaN(colIndex)) continue;
+  
+      for (let row = 0; row < data.length; row++) {
+        cells.push({
+          row,
+          col: colIndex,
+          renderer: `highlight-${key}`, // match renderer name
+        });
+      }
+    }
+  
+    return cells;
+  };
+  
+  
+
   return (
     <div className={styles.handsontable}>
       {data.length > 0 ? (
@@ -54,9 +92,10 @@ const HandsonTable = ({
           mergeCells={mergeSettings}
           colWidths={calculateColWidths(data, zoomLevel)}
           rowHeights={calculateRowHeights(data, zoomLevel)}
-          height="80vh"
+          height="60vh"
           width="100%"
           className={`${styles.handsontable} ht-theme-main`}
+          cell={getHighlightCells()}
           licenseKey="non-commercial-and-evaluation"
         />
       ) : (

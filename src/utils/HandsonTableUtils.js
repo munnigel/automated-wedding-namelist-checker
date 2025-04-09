@@ -1,6 +1,22 @@
 import * as XLSX from 'xlsx';
 import { message } from 'antd';
 
+export const COLUMN_COLOR_CONFIG = {
+  nameCol: {
+    bg: '#d7f1e1',
+    text: 'green',
+  },
+  mobileCol: {
+    bg: '#d0ebff',
+    text: '#1890ff',
+  },
+  tableNumberCol: {
+    bg: '#fff1b8',
+    text: '#faad14',
+  },
+};
+
+
 export const parseSheetToJSON = (sheet) => {
   const rawData = XLSX.utils.sheet_to_json(sheet, {
     header: 1,
@@ -61,25 +77,34 @@ export const applyZoomToFont = (zoomLevel) => {
   document.documentElement.style.setProperty('--table-font-size', `${10 * zoomLevel}px`);
 };
 
-export const generateGuestPayload = (data, nameColLetter, mobileColLetter) => {
-    const nameIndex = getColumnIndex(nameColLetter);
-    const mobileIndex = getColumnIndex(mobileColLetter);
-  
-    const cleaned = data
-      .slice(1) // skip header row
-      .map((row, i) => ({
-        name: row[nameIndex]?.trim() || '',
-        mobile: row[mobileIndex]?.trim() || '',
-      }))
-      .filter(g => g.name && g.mobile); // remove empty rows
-  
-    // Sort alphabetically by name
-    const sorted = cleaned.sort((a, b) => a.name.localeCompare(b.name));
-  
-    // Add running ID
-    return sorted.map((guest, i) => ({
-      id: i + 1,
-      name: guest.name,
-      mobile: guest.mobile,
-    }));
-  };
+export const generateGuestPayload = (data, nameCol, mobileCol, tableCol) => {
+  const nameIndex = getColumnIndex(nameCol);
+  const mobileIndex = getColumnIndex(mobileCol);
+  const tableIndex = getColumnIndex(tableCol);
+
+  // Step 1: Filter valid rows only
+  const validRows = data.filter((row) => {
+    const mobile = row[mobileIndex]?.toString().trim();
+    const name = row[nameIndex]?.toString().trim();
+
+    // Must have a valid name and numeric mobile
+    return name && mobile && !isNaN(mobile);
+  });
+
+  // Step 2: Assign IDs to only valid entries
+  const guests = validRows.map((row, idx) => {
+    const name = row[nameIndex].toString().trim();
+    const mobile = row[mobileIndex].toString().trim();
+    const tableNumber = row[tableIndex]?.toString().trim() || '';
+
+    return {
+      id: idx + 1,
+      name,
+      mobile,
+      tableNumber,
+      isPresent: false,
+    };
+  });
+
+  return guests;
+};
