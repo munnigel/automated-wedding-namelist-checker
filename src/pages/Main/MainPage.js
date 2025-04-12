@@ -73,20 +73,6 @@ const MainPage = () => {
     }
   };
   
-  
-
-  const handleSubmitToDatabase = async () => {
-    try {
-      setLoading(true);
-      await axios.post('http://localhost:5000/api/guests', finalGuestList);
-      messageApi.success('Guest list successfully saved to database!');
-    } catch (error) {
-      console.error('Error saving to DB:', error);
-      messageApi.error('Failed to save guest list to database.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <>

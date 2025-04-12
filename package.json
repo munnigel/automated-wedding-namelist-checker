@@ -17,6 +17,7 @@
     "react": "^19.1.0",
     "react-confetti-explosion": "^2.1.2",
     "react-dom": "^19.1.0",
+    "react-highlight-words": "^0.21.0",
     "react-router-dom": "^7.4.1",
     "react-scripts": "5.0.1",
     "sass": "^1.86.0",

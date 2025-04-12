@@ -1,6 +1,6 @@
 .banner {
   min-width: 50%;
-  margin-top: 15vh;
+  margin-top: 5vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,13 +19,13 @@ svg {
   overflow: visible;
 }
 
-svg path {
+.animatedSvg path {
   fill: transparent;
   stroke: #000; // or #fff for dark background
   stroke-width: 0.6;
   stroke-dasharray: 3000;
   stroke-dashoffset: 3000;
-  animation: textAnimation 5s ease-in-out forwards;
+  animation: textAnimation 20s ease-in-out forwards;
 }
 
 @keyframes textAnimation {
@@ -34,11 +34,11 @@ svg path {
   }
   30% {
     fill: #000;
-    opacity: 0.6;
+    opacity: 0.75;
   }
   50% {
     fill: #000;
-    opacity: 0.9;
+    opacity: 0.95;
   }
   85% {
     fill: #000;
@@ -52,6 +52,6 @@ svg path {
 @media only screen and (max-width: 980px) {
   .banner {
     width: 70%;
-    margin-top: 10vh;
+    margin-top: 2vh;
   }
 }

@@ -7,7 +7,7 @@ const AnimatedSignature = () => {
   return (
     <div className={styles.banner}>
       <div className={styles.title}>
-        <NigelSVG className={styles.animatedSvg} />
+        <NigelSVG className={`${styles.animatedSvg}`} />
       </div>
     </div>
   );
