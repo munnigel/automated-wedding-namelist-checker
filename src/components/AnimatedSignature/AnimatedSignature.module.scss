@@ -1,0 +1,57 @@
+.banner {
+  min-width: 50%;
+  margin-top: 15vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  padding: 0 5vw;
+  align-self: center;
+}
+
+.title {
+  width: 100%;
+}
+
+svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+svg path {
+  fill: transparent;
+  stroke: #000; // or #fff for dark background
+  stroke-width: 0.6;
+  stroke-dasharray: 3000;
+  stroke-dashoffset: 3000;
+  animation: textAnimation 5s ease-in-out forwards;
+}
+
+@keyframes textAnimation {
+  0% {
+    stroke-dashoffset: 3000;
+  }
+  30% {
+    fill: #000;
+    opacity: 0.6;
+  }
+  50% {
+    fill: #000;
+    opacity: 0.9;
+  }
+  85% {
+    fill: #000;
+  }
+  100% {
+    fill: #000;
+    stroke-dashoffset: 0;
+  }
+}
+
+@media only screen and (max-width: 980px) {
+  .banner {
+    width: 70%;
+    margin-top: 10vh;
+  }
+}

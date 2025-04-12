@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Steps, Divider, Layout, Button, message, Space } from 'antd';
+import { Steps, Divider, Layout, Button, message, Result, Space } from 'antd';
 import ExcelUploader from '../../components/ExcelUploader/ExcelUploader';
 import HandsonTable from '../../components/HandsontablePreview/HandsonTable';
 import ColumnSelector from '../../components/ColumnSelector/ColumnSelector';
@@ -103,7 +103,7 @@ const MainPage = () => {
       <Divider />
 
       {step === 0 && <ExcelUploader onDataParsed={handleExcelParsed} />}
-      {step >= 1 && (
+      {step === 1 && (
         <>
           <HandsonTable
             data={excelData}
@@ -128,23 +128,26 @@ const MainPage = () => {
 
         </>
       )}
-      {step === 2 && selectedCols && (
-        <div style={{ marginTop: 20 }}>
-          ✅ Name column: <b>{selectedCols.nameCol}</b> | Mobile column: <b>{selectedCols.mobileCol}</b>
-
-          <div style={{ marginTop: 20 }}>
-            <Space>
-              <Button
-                type="primary"
-                onClick={handleSubmitToDatabase}
-                loading={loading}
-              >
-                Submit to Database
-              </Button>
-            </Space>
-          </div>
-        </div>
-      )}
+   {step === 2 && selectedCols && (
+      <Result
+        status="success"
+        title="Guest List Uploaded Successfully"
+        subTitle={
+          <>
+            Your document has been successfully uploaded.<br />
+            You can now proceed to the attendance or QR check-in page.
+          </>
+        }
+        extra={[
+          <Button type="primary" key="attendance" href="/namelist">
+            Go to Attendance Page
+          </Button>,
+          <Button key="checkin" href="/checkin">
+            Go to QR Check-in Page
+          </Button>,
+        ]}
+      />
+    )}
     </Layout>
     </>
   );

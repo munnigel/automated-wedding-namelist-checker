@@ -2,7 +2,9 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Input, Typography, Button, message } from 'antd';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
+import { motion, AnimatePresence } from 'framer-motion';
 import styles from './MobileCheckinPage.module.scss';
+import AnimatedSignature from '../../components/AnimatedSignature/AnimatedSignature';
 
 const { Title, Text } = Typography;
 
@@ -50,9 +52,23 @@ const MobileCheckinPage = () => {
   return (
     <>
       {contextHolder}
+      <div className={styles.pageWrapper}>
       <div className={styles.checkinWrapper}>
-        <Title level={4}>Wedding Check-In</Title>
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <Title level={4} style={{ color: '#000', marginBottom: 10 }}>
+          Wedding Guest Check-In
+        </Title>
+      </motion.div>
 
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.85, delay: 0.3 }}
+      >
         <Input
           placeholder="Enter your mobile number"
           value={mobile}
@@ -61,24 +77,43 @@ const MobileCheckinPage = () => {
           size="large"
           maxLength={20}
         />
+      </motion.div>
 
-        {matchedGuest && !confirmed && (
-          <div className={styles.matchInfo}>
-            <Text>Your name: <b>{matchedGuest.name}</b></Text>
-            <Button type="primary" onClick={handleConfirm} block style={{ marginTop: 12 }}>
-              Confirm
-            </Button>
-          </div>
-        )}
+        <AnimatePresence>
+          {!confirmed && matchedGuest && (
+            <motion.div
+              className={styles.matchInfo}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Text>Your name: <b>{matchedGuest.name}</b></Text>
+              <Button type="primary" onClick={handleConfirm} block style={{ marginTop: 12 }}>
+                Confirm
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {confirmed && matchedGuest && (
-          <div className={styles.resultBox}>
-            <Text>✅ You are checked in!</Text>
-            <Title level={3}>Your ID: {matchedGuest.id}</Title>
-            <Text type="secondary">Table #: <b>{matchedGuest.tableNumber}</b></Text>
-          </div>
-        )}
-
+        <AnimatePresence>
+          {confirmed && matchedGuest && (
+            <motion.div
+              className={styles.resultBox}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+            >
+              <Text className={styles.success}>✅ You are checked in!</Text>
+              <Title level={3}>Your ID: {matchedGuest.id}</Title>
+              <Text type="secondary">Table #: <b>{matchedGuest.tableNumber}</b></Text>
+            </motion.div>
+          )}
+        </AnimatePresence>
+       
+      </div>
+      <AnimatedSignature />
       </div>
     </>
   );

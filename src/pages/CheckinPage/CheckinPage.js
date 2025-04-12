@@ -87,7 +87,7 @@ const CheckinPage = () => {
 
       <div className={styles.qrBox}>
         <Text type="secondary">Scan this to access check-in</Text>
-        <QRCode value="http://localhost:3000/checkin" size={120} />
+        <QRCode value="http://localhost:3000/checkin" size={360} />
       </div>
     </div>
     </>
